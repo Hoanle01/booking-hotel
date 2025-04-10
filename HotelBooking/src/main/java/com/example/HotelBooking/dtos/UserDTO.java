@@ -1,7 +1,12 @@
-package com.example.HotelBooking.entities;
+package com.example.HotelBooking.dtos;
 
 import com.example.HotelBooking.enums.UserRole;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,32 +15,27 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name="users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserDTO {
     private Long id;
-    @NotBlank(message = "Email is required")
-    @Column(unique = true)
+
     private String email;
 
     private String firstName;
     private String lastName;
-    @NotBlank(message ="Password is required")
+   @JsonIgnore
     private String password;
-    @NotBlank(message = "PhoneNumber is required")
-    @Column(name="phone_number")
+
     private String phoneNumber;
-    @Enumerated(EnumType.STRING)
+
 
     private UserRole role;
     private boolean active;
-    private final LocalDate createdAt=LocalDate.now();
+    private  LocalDate createdAt;
 
 }
