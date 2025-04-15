@@ -36,13 +36,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(respose,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<Respose> handleInvalidCredentialException(Exception e)
+    public ResponseEntity<Respose> handleInvalidBookingstateAndDateException(Exception e)
     {
         Respose respose=Respose.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .status(HttpStatus.BAD_GATEWAY.value())
                 .message(e.getMessage())
                 .build();
-        return new ResponseEntity<>(respose,HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(respose,HttpStatus.BAD_REQUEST);
     }
 
 }
