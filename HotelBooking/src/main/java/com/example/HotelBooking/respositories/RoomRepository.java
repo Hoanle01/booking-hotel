@@ -1,7 +1,7 @@
 package com.example.HotelBooking.respositories;
 
 import com.example.HotelBooking.entities.Room;
-import com.example.HotelBooking.enums.RoomTye;
+import com.example.HotelBooking.enums.RoomType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,21 +13,21 @@ public interface RoomRepository extends JpaRepository<Room,Long> {
 
 
     @Query("""
-            SELECT r FROM Room r
-            WHERE
-               r.id NOT IN(
-               SELECT b.room.id
-               FROM Booking b
-               WHERE :checkInDate<=b.checkOutDate
-               AND :checkOutDate>= b.checkInDate
-               AND b.bookingStatus IN ('BOOKED','CHECKED_IN')
-               )
-               AND(:roomType is NULL OR r.TYPE=:roomType)
-            """)
-    List<Room> findAvailableRoooms(
+        SELECT r FROM Room r
+        WHERE r.id NOT IN (
+            SELECT b.room.id
+            FROM Booking b
+            WHERE :checkInDate <= b.checkOutDate
+              AND :checkOutDate >= b.checkInDate
+              AND b.bookingStatus IN ('BOOKED','CHECKED_IN')
+        )
+        AND (:roomType IS NULL OR r.type = :roomType)
+        """)
+
+    List<Room> findAvailableRooms(
             @Param("checkInDate") LocalDate checkInDate,
             @Param("checkOutDate") LocalDate checkOutDate,
-            @Param("roomType") RoomTye roomTye
+            @Param("roomType") RoomType roomType
             );
     @Query("""
             SELECT r FROM Room r

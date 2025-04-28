@@ -1,8 +1,8 @@
 package com.example.HotelBooking.dtos;
-
 import com.example.HotelBooking.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Respose {
+public class Response {
+
     //generic
     private int status;
     private String message;
@@ -23,26 +24,31 @@ public class Respose {
     //for login
     private String token;
     private UserRole role;
-    private boolean active;
+    private Boolean active;
     private String expirationTime;
 
     //user data
     private UserDTO user;
     private List<UserDTO> users;
 
-    //user Data
-    private  BookingDTO booking;
+    // booking data
+    private BookingDTO booking;
     private List<BookingDTO> bookings;
-    //room Data
-    private  RoomDTO room;
+
+    //room data
+    private RoomDTO room;
     private List<RoomDTO> rooms;
+
     //room payments
     private String transactionId;
-    private  PaymentDTO payment;
+    private PaymentDTO payment;
     private List<PaymentDTO> payments;
-    //room notification
-    private  NotificationDTO notification;
-    private List<NotificationDTO> notificationDTOS;
 
-    private final LocalDateTime timetamp=LocalDateTime.now();
+    //room Notification
+    private NotificationDTO notification;
+    private List<NotificationDTO> notifications;
+
+    private final LocalDateTime timestamp = LocalDateTime.now();
+
+
 }

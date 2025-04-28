@@ -1,6 +1,6 @@
 package com.example.HotelBooking.exceptions;
 
-import com.example.HotelBooking.dtos.Respose;
+import com.example.HotelBooking.dtos.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,40 +9,40 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Respose> handleAllUnknowmException(Exception e)
+    public ResponseEntity<Response> handleAllUnknowmException(Exception e)
     {
-        Respose respose=Respose.builder()
+        Response respose= Response.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message(e.getMessage())
                 .build();
         return new ResponseEntity<>(respose,HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Respose> handleNotFoundException(Exception e)
+    public ResponseEntity<Response> handleNotFoundException(Exception e)
     {
-        Respose respose=Respose.builder()
+        Response response = Response.builder()
                 .status(HttpStatus.NOT_FOUND.value())
                 .message(e.getMessage())
                 .build();
-        return new ResponseEntity<>(respose,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(NameValueRequiredException.class)
-    public ResponseEntity<Respose> handleNameValueRequiredException(Exception e)
+    public ResponseEntity<Response> handleNameValueRequiredException(Exception e)
     {
-        Respose respose=Respose.builder()
+        Response response = Response.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
                 .build();
-        return new ResponseEntity<>(respose,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<Respose> handleInvalidBookingstateAndDateException(Exception e)
+    public ResponseEntity<Response> handleInvalidBookingstateAndDateException(Exception e)
     {
-        Respose respose=Respose.builder()
+        Response response = Response.builder()
                 .status(HttpStatus.BAD_GATEWAY.value())
                 .message(e.getMessage())
                 .build();
-        return new ResponseEntity<>(respose,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
 
 }

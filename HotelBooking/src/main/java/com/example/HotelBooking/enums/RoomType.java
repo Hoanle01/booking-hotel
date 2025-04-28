@@ -1,5 +1,5 @@
 package com.example.HotelBooking.enums;
 
-public enum RoomTye {
+public enum RoomType {
     SINGLE,DOUBLE,SUIT,TRIPLE
 }

@@ -1,6 +1,6 @@
 package com.example.HotelBooking.exceptions;
 
-import com.example.HotelBooking.dtos.Respose;
+import com.example.HotelBooking.dtos.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class CustomAuthenticationEntryPoin implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException)
             throws IOException, ServletException {
-        Respose authErrorResponse=Respose.builder()
+        Response authErrorResponse= Response.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())//401 invalid token kind of error
                 .message(authException.getMessage())
                 .build();

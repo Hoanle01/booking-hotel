@@ -1,6 +1,6 @@
 package com.example.HotelBooking.entities;
 
-import com.example.HotelBooking.enums.RoomTye;
+import com.example.HotelBooking.enums.RoomType;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.DecimalMin;
@@ -24,7 +24,7 @@ public class Room {
     @Column(unique = true)
     private Integer roomNumber;
     @Enumerated(EnumType.STRING)
-    private RoomTye type;
+    private RoomType type;
     @DecimalMin(value = "0.1",message = "Price per night is required ")
     private BigDecimal pricePerNight;
     @Min(value = 1,message = "capacity must be at least 1")

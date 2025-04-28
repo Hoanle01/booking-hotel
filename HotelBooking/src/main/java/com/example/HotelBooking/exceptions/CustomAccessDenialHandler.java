@@ -1,7 +1,7 @@
 package com.example.HotelBooking.exceptions;
 
 
-import com.example.HotelBooking.dtos.Respose;
+import com.example.HotelBooking.dtos.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,23 +13,27 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+
+
 @Component
 @RequiredArgsConstructor
 public class CustomAccessDenialHandler implements AccessDeniedHandler {
     private final ObjectMapper objectMapper;
+
     @Override
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException accessDeniedException)
             throws IOException, ServletException {
-        Respose authErrorResponse=Respose.builder()
-                .status(HttpStatus.FORBIDDEN.value())//403 invalid token but unauthorize role
+
+        Response authErrorResponse = Response.builder()
+                .status(HttpStatus.FORBIDDEN.value()) //403 valid token but unauthorize role.
                 .message(accessDeniedException.getMessage())
                 .build();
+
         response.setContentType("application/json");
         response.setStatus(HttpStatus.FORBIDDEN.value());
         response.getWriter().write(objectMapper.writeValueAsString(authErrorResponse));
+
     }
-
 }
-
