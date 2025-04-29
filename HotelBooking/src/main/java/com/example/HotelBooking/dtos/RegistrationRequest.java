@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationDTO {
+public class RegistrationRequest {
     @NotBlank(message="FirstName is required")
     private String firstName;
     @NotBlank(message = "LastName is required")
