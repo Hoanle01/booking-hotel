@@ -25,7 +25,7 @@ public class HotelBookingApplication {
 				.body("hello bro")
 				.build();
 
-		notificationService.sendEmail(notificationDTO);
+		//notificationService.sendEmail(notificationDTO);
 	}
 
 }

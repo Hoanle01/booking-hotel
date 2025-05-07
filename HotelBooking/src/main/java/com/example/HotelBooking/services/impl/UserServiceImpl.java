@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
                 .firstName(registrationRequest.getFirstName())
                 .lastName(registrationRequest.getLastName())
                 .email(registrationRequest.getEmail())
-                .password(registrationRequest.getPassword())
+                .password(passwordEncoder.encode(registrationRequest.getPassword()))
                 .phoneNumber(registrationRequest.getPhoneNumber())
                 .role(role)
                 .active(true)
@@ -54,22 +54,30 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Response loginUser(LoginRequest loginRequest) {
-        User user=userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(()->new NotFoundException("Email Not Found"));
-        if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
-            throw new InvalidCredentialException("Password not match");
+
+
+        log.info("INSIDE loginUser()"+loginRequest.getPassword());
+
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new NotFoundException("Email Not Found"));
+        log.info(user.getPassword());
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new InvalidCredentialException("Password does not match");
         }
-        String token=jwtUtils.generateToken(user.getEmail());
+
+        String token = jwtUtils.generateToken(user.getEmail());
 
         return Response.builder()
                 .status(200)
-                .message("User logged in successfully")
+                .message("user logged in successfully")
                 .role(user.getRole())
                 .token(token)
                 .active(user.isActive())
                 .expirationTime("6 month")
                 .build();
-    }
+
+    };
+
 
     @Override
     public Response getAllUser() {
