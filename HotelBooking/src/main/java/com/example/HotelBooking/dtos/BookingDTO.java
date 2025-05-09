@@ -26,7 +26,8 @@ public class BookingDTO {
 
     private User user;
 
-    private Room room;
+    private RoomDTO room;
+    private Long roomId;
     private PaymentStatus paymentStatus;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
