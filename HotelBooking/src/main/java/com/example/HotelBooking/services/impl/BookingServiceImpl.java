@@ -18,8 +18,10 @@ import com.example.HotelBooking.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import com.example.HotelBooking.entities.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,7 +56,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public Response createBooking(BookingDTO bookingDTO) {
-        get currentUser=userService.getCurrentLoggedInUser();
+       User  currentUser=userService.getCurrentLoggedInUser();
         Room room=roomRepository.findById(bookingDTO.getRoomId())
                 .orElseThrow(()-> new NotFoundException("Room not found "));
         //Vallidation : ensure check in Date is not before today
@@ -72,7 +74,7 @@ public class BookingServiceImpl implements BookingService{
         // Valid room avalibity
         boolean isAvailable=bookingRepository.isRoomAvailable(room.getId(),bookingDTO.getCheckInDate(),bookingDTO.getCheckOutDate());
         if(!isAvailable){
-            throw new InvalidBookingStateAndDateException("Room is not ")
+            throw new InvalidBookingStateAndDateException("Room is not ");
         }
         BigDecimal totalPrice=calculateTotalPrice(room,bookingDTO);
         String bookingReference=bookingCodeGenerator.generateBookingReference();
@@ -93,8 +95,15 @@ public class BookingServiceImpl implements BookingService{
         //send email to user via mail
         NotificationDTO notificationDTO= NotificationDTO.builder()
                 .recipient(currentUser.getEmail())
-                .subject("Booking Configmation")
-                .
+                .subject("Booking Confirmation")
+                .body(String.format("Your Booking has been created successfully.\n Please proceed with your payment using the payment"+"like below \n%s",paymentLink))
+                .bookingReference(bookingReference)
+                .build();
+        notificationService.sendEmail(notificationDTO);
+        return Response.builder()
+                .status(200)
+                .message("Booking is successful")
+                .booking(bookingDTO)
                 .build();
     }
 
@@ -106,11 +115,36 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     public Response findBookingBookingByReferenceNo(String bookingReference) {
-        return null;
+
+        Booking booking=bookingRepository.findByBookingReference(bookingReference)
+                .orElseThrow(()->new NotFoundException("Booking Not Found"));
+        BookingDTO bookingDTO=modelMapper.map(booking,BookingDTO.class);
+        return Response.builder()
+                .status(200)
+                .message("success")
+                .booking(bookingDTO)
+                .build();
     }
 
     @Override
     public Response updateBooking(BookingDTO bookingDTO) {
-        return null;
+
+        if(bookingDTO.getId()==null) throw new NotFoundException("Booking ID is Required");
+        Booking existingBooking=bookingRepository.findById(bookingDTO.getId())
+                .orElseThrow(()->new NotFoundException("booking not found"));
+        if(bookingDTO.getBookingStatus()!=null){
+            existingBooking.setBookingStatus(bookingDTO.getBookingStatus());
+
+        }
+        if(bookingDTO.getPaymentStatus()!=null){
+            existingBooking.setPaymentStatus(bookingDTO.getPaymentStatus());
+
+        }
+        bookingRepository.save(existingBooking);
+
+        return Response.builder()
+                .status(200)
+                .message("booking updated successfully")
+                .build();
     }
 }
